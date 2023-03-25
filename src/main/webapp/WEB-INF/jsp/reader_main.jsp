@@ -1,7 +1,7 @@
 <%--
   Created by IntelliJ IDEA.
-  User: 君行天下
-  Date: 2017/7/30
+  User: wzx
+  Date: 2023/3/25
   Time: 18:52
   To change this template use File | Settings | File Templates.
 --%>
@@ -18,7 +18,6 @@
         }
     </style>
 </head>
-<body>
 <body>
 <nav class="navbar navbar-default" role="navigation" style="background-color:#fff" style="background-color:#fff">
     <div class="container-fluid">

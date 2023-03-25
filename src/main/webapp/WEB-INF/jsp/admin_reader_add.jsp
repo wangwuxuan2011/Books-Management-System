@@ -1,7 +1,7 @@
 <%--
   Created by IntelliJ IDEA.
-  User: 君行天下
-  Date: 2017/7/31
+  User: wzx
+  Date: 2023/3/25
   Time: 8:09
   To change this template use File | Settings | File Templates.
 --%>
@@ -81,7 +81,7 @@
             <form action="reader_add_do.html" method="post" id="readeredit" >
                 <div class="input-group">
                     <span  class="input-group-addon">读者证号</span>
-                    <input  type="text" class="form-control" name="readerId" id="readerId" ">
+                    <input  type="text" class="form-control" name="readerId" id="readerId">
                 </div>
 
                 <div class="input-group">
