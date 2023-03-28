@@ -90,7 +90,9 @@ public class LoginController {
     public ModelAndView toAdminMain() {
         ArrayList<BookClassCount> classCount = bookService.countBookAsClass();
         ModelAndView modelAndView = new ModelAndView("admin_main");
+        ArrayList<Book> hotBooks=bookService.getHotBooks();
         modelAndView.addObject("classCount", classCount);
+        modelAndView.addObject("hotBooks",hotBooks);
         return modelAndView;
     }
 

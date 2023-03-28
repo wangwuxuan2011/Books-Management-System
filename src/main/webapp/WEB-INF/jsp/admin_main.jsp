@@ -43,11 +43,12 @@
             width: 40%;
             margin: 20px;
             padding: 20px;
-            height: 350px;
+            height: 400px;
             border: 1px solid #ccc;
             border-radius: 5px;
             box-shadow: 0 0 5px #ccc;
             background-color: #fff;
+            overflow: auto;
         }
 
         .about {
@@ -128,10 +129,10 @@
             <button type="button" class="btn btn-danger" onclick="logout()">退出账号</button>
         </div>
     </section>
-    <section>
-        <h4><a href="allreaders.html">活跃读者</a></h4>
-        <div id="allreaders" style="width: 100%;height:100%;"></div>
-    </section>
+<%--    <section>--%>
+<%--        <h4><a href="allreaders.html">活跃读者</a></h4>--%>
+<%--        <div id="allreaders" style="width: 100%;height:100%;"></div>--%>
+<%--    </section>--%>
     <section>
         <h4><a href="allbooks.html">藏书比例</a></h4>
         <div id="allbooks" style="width: 100%;height:100%;"></div>
@@ -139,6 +140,29 @@
     <section>
         <h4><a href="lendlist.html">借还书次</a></h4>
         <div id="lendlist" style="width: 100%;height:100%;"></div>
+    </section>
+    <section>
+        <h4><a href="reader_querybook.html">热门图书</a></h4>
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>书名</th>
+                <th>作者</th>
+                <th>出版社</th>
+                <th>ISBN</th>
+            </tr>
+            </thead>
+            <tbody>
+            <c:forEach items="${hotBooks}" var="book" begin="0" end="4">
+                <tr onclick="goToBookPage(${book.bookId})">
+                    <td><c:out value="${book.name}"></c:out></td>
+                    <td><c:out value="${book.author}"></c:out></td>
+                    <td><c:out value="${book.publish}"></c:out></td>
+                    <td><c:out value="${book.isbn}"></c:out></td>
+                </tr>
+            </c:forEach>
+            </tbody>
+        </table>
     </section>
 </div>
 <c:if test="${!empty login}">
@@ -161,33 +185,33 @@
 </script>
 <script type="text/javascript">
     // 基于准备好的dom，初始化echarts实例
-    var allreaders = echarts.init(document.getElementById('allreaders'));
+    // var allreaders = echarts.init(document.getElementById('allreaders'));
     var allbooks = echarts.init(document.getElementById('allbooks'));
     var lendlist = echarts.init(document.getElementById('lendlist'));
 
     // 指定图表的配置项和数据
-    allreaders_option = {
-        xAxis: {
-            type: 'category',
-            data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
-        },
-        yAxis: {
-            type: 'value'
-        },
-        series: [
-            {
-                data: [10, 15, 13, 12, 10, 15, 13],
-                type: 'line',
-                label: {
-                    show: true,
-                    position: 'bottom',
-                    textStyle: {
-                        fontSize: 20
-                    }
-                }
-            }
-        ]
-    };
+    // allreaders_option = {
+    //     xAxis: {
+    //         type: 'category',
+    //         data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+    //     },
+    //     yAxis: {
+    //         type: 'value'
+    //     },
+    //     series: [
+    //         {
+    //             data: [10, 15, 13, 12, 10, 15, 13],
+    //             type: 'line',
+    //             label: {
+    //                 show: true,
+    //                 position: 'bottom',
+    //                 textStyle: {
+    //                     fontSize: 20
+    //                 }
+    //             }
+    //         }
+    //     ]
+    // };
     allbooks_option = {
         tooltip: {
             trigger: 'item', //数据项图形触发
@@ -240,7 +264,7 @@
             }
         ]
     };
-    allreaders.setOption(allreaders_option);
+    // allreaders.setOption(allreaders_option);
     allbooks.setOption(allbooks_option);
     lendlist.setOption(lendlist_option);
 </script>

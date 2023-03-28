@@ -86,7 +86,7 @@
                 <label>
                     <input type="checkbox" id="remember">记住密码
                 </label>
-                <a style="margin-left: 100px" href="#">忘记密码?</a>
+                <a style="margin-left: 100px" onclick="forgetPassword()">忘记密码?</a>
             </div>
 
             <p style="text-align: right;color: red;position: absolute" id="info"></p><br/>
@@ -114,7 +114,9 @@
             remember: checked
         }, {expires: 30, path: ''})
     }
-
+    function forgetPassword() {
+        alert("请联系管理员进行重置，默认密码111111");
+    }
     // 若选择记住登录信息，则进入页面时设置登录信息
     function setLoginStatus() {
         var loginStatusText = Cookies.get('loginStatus')
