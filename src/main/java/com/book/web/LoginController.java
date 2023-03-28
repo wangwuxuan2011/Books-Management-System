@@ -98,9 +98,11 @@ public class LoginController {
     @RequestMapping("/reader_main.html")
     public ModelAndView toReaderMain(HttpServletRequest request) {
         ReaderCard readerCard = (ReaderCard) request.getSession().getAttribute("readercard");
-        ArrayList<Book> books=bookService.getRandomBooks();
+        ArrayList<Book> randomBooks=bookService.getRandomBooks();
+        ArrayList<Book> hotBooks=bookService.getHotBooks();
         ModelAndView modelAndView = new ModelAndView("reader_main");
-        modelAndView.addObject("randomBooks",books);
+        modelAndView.addObject("randomBooks",randomBooks);
+        modelAndView.addObject("hotBooks",hotBooks);
         modelAndView.addObject("list", lendService.myLendList(readerCard.getReaderId()));
         return modelAndView;
     }

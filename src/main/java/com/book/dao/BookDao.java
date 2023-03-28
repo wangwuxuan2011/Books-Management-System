@@ -28,6 +28,7 @@ public class BookDao {
     private final static String EDIT_BOOK_SQL = "update book_info set name= ? ,author= ? ,publish= ? ,ISBN= ? ,introduction= ? ,language= ? ,price= ? ,pubdate= ? ,class_id= ? ,pressmark= ? ,state= ?  where book_id= ? ;";
     private final static String QUERY_ALL_BOOKS_SQL = "SELECT * FROM book_info ";
     private final static String QUERY_RANDOM_BOOKS_SQL = "SELECT * FROM book_info ORDER BY RAND() LIMIT 5;";
+    private final static String GET_HOT_BOOKS_SQL = "select book_info.*,count(*)as count from lend_list join book_info on lend_list.book_id=book_info.book_id group by book_info.isbn order by count desc limit 5;";
     private final static String QUERY_BOOK_SQL = "SELECT * FROM book_info WHERE book_id like  ?  or name like ?   ";
     //查询匹配图书的个数
     private final static String MATCH_BOOK_SQL = "SELECT count(*) FROM book_info WHERE book_id like ?  or name like ?  ";
@@ -74,6 +75,10 @@ public class BookDao {
     }
     public ArrayList<Book> getRandomBooks() {
         return getBooks(QUERY_RANDOM_BOOKS_SQL);
+
+    }
+    public ArrayList<Book> getHotBooks() {
+        return getBooks(GET_HOT_BOOKS_SQL);
 
     }
 

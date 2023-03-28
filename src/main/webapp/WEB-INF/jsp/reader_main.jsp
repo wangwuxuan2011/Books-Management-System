@@ -37,6 +37,7 @@
             border-radius: 5px;
             box-shadow: 0 0 5px #ccc;
             background-color: #fff;
+            overflow: auto;
         }
     </style>
 </head>
@@ -90,7 +91,7 @@
             </thead>
             <tbody>
             <c:forEach items="${list}" var="alog" begin="0" end="4">
-                <tr>
+                <tr onclick="goToBookPage(${alog.bookId})">
                     <td><c:out value="${alog.bookId}"></c:out></td>
                     <td><c:out value="${alog.lendDate}"></c:out></td>
                     <td><c:out value="${alog.backDate}"></c:out></td>
@@ -152,7 +153,7 @@
             </thead>
             <tbody>
             <c:forEach items="${randomBooks}" var="book">
-                <tr>
+                <tr onclick="goToBookPage(${book.bookId})">
                     <td><c:out value="${book.bookId}"></c:out></td>
                     <td><c:out value="${book.name}"></c:out></td>
                     <td><c:out value="${book.publish}"></c:out></td>
@@ -161,13 +162,35 @@
             </c:forEach>
             </tbody>
         </table>
-        <c:if test="${empty list }">
-            <div style="display: flex;justify-content: center;align-content: center">
-                未查询到任何借阅记录
-            </div>
-        </c:if>
+    </section>
+    <section>
+        <h4><a href="reader_querybook.html">热门图书</a></h4>
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>书名</th>
+                <th>作者</th>
+                <th>出版社</th>
+                <th>ISBN</th>
+            </tr>
+            </thead>
+            <tbody>
+            <c:forEach items="${hotBooks}" var="book">
+                <tr onclick="goToBookPage(${book.bookId})">
+                    <td><c:out value="${book.name}"></c:out></td>
+                    <td><c:out value="${book.author}"></c:out></td>
+                    <td><c:out value="${book.publish}"></c:out></td>
+                    <td><c:out value="${book.isbn}"></c:out></td>
+                </tr>
+            </c:forEach>
+            </tbody>
+        </table>
     </section>
 </div>
-
+<script>
+    function goToBookPage(bookId) {
+        window.location.href = "readerbookdetail.html?bookId=" + bookId;
+    }
+</script>
 </body>
 </html>

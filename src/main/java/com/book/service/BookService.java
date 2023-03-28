@@ -30,6 +30,9 @@ public class BookService {
     public ArrayList<BookClassCount> countBookAsClass(){
         return bookDao.countBookAsClass();
     }
+    public ArrayList<Book> getHotBooks(){
+        return bookDao.getHotBooks();
+    }
 
     public int deleteBook(long bookId){
         return bookDao.deleteBook(bookId);
