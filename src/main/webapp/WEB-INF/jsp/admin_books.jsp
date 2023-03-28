@@ -57,6 +57,8 @@
                     </a>
                     <ul class="dropdown-menu">
                         <li><a href="lendlist.html">借还日志</a></li>
+                        <li class="divider"></li>
+                        <li><a href="lend_and_return.html">读者借还书</a></li>
                     </ul>
                 </li>
                 <li >
@@ -66,8 +68,7 @@
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="login.html"><span class="glyphicon glyphicon-user"></span>&nbsp;${admin.adminId}，已登录</a></li>
-                <li><a href="logout.html"><span class="glyphicon glyphicon-log-in"></span>&nbsp;退出</a></li>
+                <li><a href="logout.html"><span class="glyphicon glyphicon-log-in"></span>退出账号</a></li>
             </ul>
         </div>
     </div>
@@ -98,7 +99,7 @@
 </div>
 <div style="position: relative;top: 10%">
 <c:if test="${!empty succ}">
-    <div class="alert alert-success alert-dismissable">
+    <div class="alert alert-success alert-dismissable" >
         <button type="button" class="close" data-dismiss="alert"
                 aria-hidden="true">
             &times;
@@ -107,7 +108,7 @@
     </div>
 </c:if>
 <c:if test="${!empty error}">
-    <div class="alert alert-danger alert-dismissable">
+    <div class="alert alert-danger alert-dismissable" >
         <button type="button" class="close" data-dismiss="alert"
                 aria-hidden="true">
             &times;

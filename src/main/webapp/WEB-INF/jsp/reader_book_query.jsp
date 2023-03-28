@@ -12,10 +12,10 @@
     <title>全部图书信息</title>
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <script src="js/jquery-3.2.1.js"></script>
-    <script src="js/bootstrap.min.js" ></script>
+    <script src="js/bootstrap.min.js"></script>
     <style>
-        body{
-            background-color: rgb(240,242,245);
+        body {
+            background-color: rgb(240, 242, 245);
         }
     </style>
 </head>
@@ -29,29 +29,28 @@
         <div class="collapse navbar-collapse" id="example-navbar-collapse">
             <ul class="nav navbar-nav navbar-left">
                 <li class="active">
-                    <a href="reader_querybook.html" >
+                    <a href="reader_querybook.html">
                         图书查询
                     </a>
                 </li>
                 <li>
-                    <a href="reader_info.html" >
+                    <a href="reader_info.html">
                         个人信息
                     </a>
                 </li>
-                <li >
-                    <a href="mylend.html" >
+                <li>
+                    <a href="mylend.html">
                         我的借还
                     </a>
                 </li>
-                <li >
-                    <a href="reader_repasswd.html" >
+                <li>
+                    <a href="reader_repasswd.html">
                         密码修改
                     </a>
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="reader_info.html"><span class="glyphicon glyphicon-user"></span>&nbsp;${readercard.name}，已登录</a></li>
-                <li><a href="login.html"><span class="glyphicon glyphicon-log-in"></span>&nbsp;退出</a></li>
+                <li><a href="logout.html"><span class="glyphicon glyphicon-log-in"></span>退出账号</a></li>
             </ul>
         </div>
     </div>
@@ -59,21 +58,23 @@
 
 
 <div style="padding: 30px 550px 10px">
-    <form   method="post" action="reader_querybook_do.html" class="form-inline"  id="searchform">
+    <form method="post" action="reader_querybook_do.html" class="form-inline" id="searchform">
         <div class="input-group">
-            <input type="text" placeholder="输入图书号或图书名" class="form-control" id="search" name="searchWord" class="form-control">
+            <input type="text" placeholder="输入图书号或图书名" class="form-control" id="search" name="searchWord"
+                   class="form-control">
             <span class="input-group-btn">
                             <input type="submit" value="搜索" class="btn btn-default">
             </span>
         </div>
     </form>
     <script>
-        function mySubmit(flag){
+        function mySubmit(flag) {
             return flag;
         }
+
         $("#searchform").submit(function () {
-            var val=$("#search").val();
-            if(val==''){
+            var val = $("#search").val();
+            if (val == '') {
                 alert("请输入关键字");
                 return mySubmit(false);
             }
@@ -82,7 +83,7 @@
 </div>
 <div style="position: relative;top: 10%">
     <c:if test="${!empty succ}">
-        <div class="alert alert-success alert-dismissable">
+        <div class="alert alert-success alert-dismissable" >
             <button type="button" class="close" data-dismiss="alert"
                     aria-hidden="true">
                 &times;
@@ -91,7 +92,7 @@
         </div>
     </c:if>
     <c:if test="${!empty error}">
-        <div class="alert alert-danger alert-dismissable">
+        <div class="alert alert-danger alert-dismissable" >
             <button type="button" class="close" data-dismiss="alert"
                     aria-hidden="true">
                 &times;
@@ -134,7 +135,9 @@
                         <c:if test="${book.state==0}">
                             <td>借出</td>
                         </c:if>
-                        <td><a href="readerbookdetail.html?bookId=<c:out value="${book.bookId}"></c:out>"><button type="button" class="btn btn-success btn-xs">详情</button></a></td>
+                        <td><a href="readerbookdetail.html?bookId=<c:out value="${book.bookId}"></c:out>">
+                            <button type="button" class="btn btn-success btn-xs">详情</button>
+                        </a></td>
                     </tr>
                 </c:forEach>
                 </tbody>
@@ -142,7 +145,22 @@
         </div>
     </div>
 </c:if>
+<script>
+    function GetQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        var r = window.location.search.substr(1).match(reg); //获取url中"?"符后的字符串并正则匹配
+        var context = "";
+        if (r != null)
+            context = decodeURIComponent(r[2]);
+        reg = null;
+        r = null;
+        return context == null || context == "" || context == "undefined" ? "" : context;
+    }
 
-
+    if (GetQueryString("searchWord")) {
+        $("#search").val(GetQueryString("searchWord"));
+        $("#searchform").submit();
+    }
+</script>
 </body>
 </html>

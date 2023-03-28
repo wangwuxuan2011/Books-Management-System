@@ -178,12 +178,17 @@ public class ReaderController {
             redirectAttributes.addFlashAttribute("error", "修改失败,两次输入的新密码不相同");
             return "redirect:/reader_repasswd.html";
         }
-
-
-
-
-
-
+    }
+    @RequestMapping("reset_reader_pwd_do.html")
+    public String resetReaderPwdDo(HttpServletRequest request,RedirectAttributes redirectAttributes){
+        int readerId= Integer.parseInt(request.getParameter("id"));
+        boolean succ=readerCardService.updatePasswd(readerId,"111111");
+        if (succ){
+            redirectAttributes.addFlashAttribute("succ", "密码修改成功！");
+        }else {
+            redirectAttributes.addFlashAttribute("succ", "密码修改失败！");
+        }
+        return "redirect:/allreaders.html";
     }
     //管理员功能--读者信息添加
     @RequestMapping("reader_add_do.html")

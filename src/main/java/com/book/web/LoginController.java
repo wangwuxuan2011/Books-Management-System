@@ -1,7 +1,11 @@
 package com.book.web;
 
 import com.book.domain.Admin;
+import com.book.domain.Book;
+import com.book.domain.BookClassCount;
 import com.book.domain.ReaderCard;
+import com.book.service.BookService;
+import com.book.service.LendService;
 import com.book.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,6 +17,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 //标注为一个Spring mvc的Controller
@@ -20,7 +25,17 @@ import java.util.HashMap;
 public class LoginController {
 
     private LoginService loginService;
+    private LendService lendService;
+    private BookService bookService;
+    @Autowired
+    public void setBookService(BookService bookService) {
+        this.bookService = bookService;
+    }
 
+    @Autowired
+    public void setLendService(LendService lendService) {
+        this.lendService = lendService;
+    }
 
     @Autowired
     public void setLoginService(LoginService loginService) {
@@ -28,11 +43,12 @@ public class LoginController {
     }
 
     //负责处理login.html请求
-    @RequestMapping(value = {"/","/login.html"})
-    public String toLogin(HttpServletRequest request){
+    @RequestMapping(value = {"/", "/login.html"})
+    public String toLogin(HttpServletRequest request) {
         request.getSession().invalidate();
         return "index";
     }
+
     @RequestMapping("/logout.html")
     public String logout(HttpServletRequest request) {
         request.getSession().invalidate();
@@ -43,43 +59,51 @@ public class LoginController {
     //负责处理loginCheck.html请求
     //请求参数会根据参数名称默认契约自动绑定到相应方法的入参中
     @RequestMapping(value = "/api/loginCheck", method = RequestMethod.POST)
-    public @ResponseBody Object loginCheck(HttpServletRequest request){
-        int id=Integer.parseInt(request.getParameter("id"));
+    public @ResponseBody Object loginCheck(HttpServletRequest request) {
+        int id = Integer.parseInt(request.getParameter("id"));
         String passwd = request.getParameter("passwd");
-                boolean isReader = loginService.hasMatchReader(id, passwd);
-                boolean isAdmin = loginService.hasMatchAdmin(id, passwd);
+        boolean isReader = loginService.hasMatchReader(id, passwd);
+        boolean isAdmin = loginService.hasMatchAdmin(id, passwd);
         HashMap<String, String> res = new HashMap<String, String>();
-                if (isAdmin==false&&isReader==false) {
-                    res.put("stateCode", "0");
-                    res.put("msg","账号或密码错误！");
-                } else if(isAdmin){
-                    Admin admin=new Admin();
-                    admin.setAdminId(id);
-                    admin.setPassword(passwd);
-                    request.getSession().setAttribute("admin",admin);
-                    res.put("stateCode", "1");
-                    res.put("msg","管理员登陆成功！");
-                }else {
-                    ReaderCard readerCard = loginService.findReaderCardByUserId(id);
-                    request.getSession().setAttribute("readercard", readerCard);
-                    res.put("stateCode", "2");
-                    res.put("msg","读者登陆成功！");
-                }
+        if (isAdmin == false && isReader == false) {
+            res.put("stateCode", "0");
+            res.put("msg", "账号或密码错误！");
+        } else if (isAdmin) {
+            Admin admin = new Admin();
+            admin.setAdminId(id);
+            admin.setPassword(passwd);
+            request.getSession().setAttribute("admin", admin);
+            res.put("stateCode", "1");
+            res.put("msg", "管理员登陆成功！");
+        } else {
+            ReaderCard readerCard = loginService.findReaderCardByUserId(id);
+            request.getSession().setAttribute("readercard", readerCard);
+            res.put("stateCode", "2");
+            res.put("msg", "读者登陆成功！");
+        }
         return res;
-    };
-    @RequestMapping("/admin_main.html")
-    public ModelAndView toAdminMain(HttpServletResponse response) {
+    }
 
-            return new ModelAndView("admin_main");
+    ;
+
+    @RequestMapping("/admin_main.html")
+    public ModelAndView toAdminMain() {
+        ArrayList<BookClassCount> classCount = bookService.countBookAsClass();
+        ModelAndView modelAndView = new ModelAndView("admin_main");
+        modelAndView.addObject("classCount", classCount);
+        return modelAndView;
     }
 
 
     @RequestMapping("/reader_main.html")
-    public ModelAndView toReaderMain(HttpServletResponse response) {
-
-        return new ModelAndView("reader_main");
+    public ModelAndView toReaderMain(HttpServletRequest request) {
+        ReaderCard readerCard = (ReaderCard) request.getSession().getAttribute("readercard");
+        ArrayList<Book> books=bookService.getRandomBooks();
+        ModelAndView modelAndView = new ModelAndView("reader_main");
+        modelAndView.addObject("randomBooks",books);
+        modelAndView.addObject("list", lendService.myLendList(readerCard.getReaderId()));
+        return modelAndView;
     }
-
 
 
     @RequestMapping("/admin_repasswd.html")
@@ -89,34 +113,35 @@ public class LoginController {
     }
 
     @RequestMapping("/admin_repasswd_do")
-    public String reAdminPasswdDo(HttpServletRequest request,String oldPasswd,String newPasswd,String reNewPasswd,RedirectAttributes redirectAttributes ) {
+    public String reAdminPasswdDo(HttpServletRequest request, String oldPasswd, String newPasswd, String reNewPasswd, RedirectAttributes redirectAttributes) {
 
-        Admin admin=(Admin) request.getSession().getAttribute("admin");
-        int id=admin.getAdminId();
-        String passwd=loginService.getAdminPasswd(id);
+        Admin admin = (Admin) request.getSession().getAttribute("admin");
+        int id = admin.getAdminId();
+        String passwd = loginService.getAdminPasswd(id);
 
-        if(passwd.equals(oldPasswd)){
-            boolean succ=loginService.adminRePasswd(id,newPasswd);
-            if (succ){
+        if (passwd.equals(oldPasswd)) {
+            boolean succ = loginService.adminRePasswd(id, newPasswd);
+            if (succ) {
 
                 redirectAttributes.addFlashAttribute("succ", "密码修改成功！");
                 return "redirect:/admin_repasswd.html";
-            }
-            else {
+            } else {
                 redirectAttributes.addFlashAttribute("error", "密码修改失败！");
                 return "redirect:/admin_repasswd.html";
             }
-        }else {
+        } else {
             redirectAttributes.addFlashAttribute("error", "旧密码错误！");
             return "redirect:/admin_repasswd.html";
         }
-    };
+    }
+
+    ;
 
     //配置404页面
-     @RequestMapping("*")
-     public String notFind(){
-     return "404";
-       }
+    @RequestMapping("*")
+    public String notFind() {
+        return "404";
+    }
 
 
 }

@@ -16,6 +16,13 @@
         body{
             background-color: rgb(240,242,245);
         }
+        .formBody {
+            display: flex;
+            flex-direction: column;
+        }
+        .formBody>*{
+            margin: 5px 0;
+        }
     </style>
 
 </head>
@@ -56,6 +63,8 @@
                     </a>
                     <ul class="dropdown-menu">
                         <li><a href="lendlist.html">借还日志</a></li>
+                        <li class="divider"></li>
+                        <li><a href="lend_and_return.html">读者借还书</a></li>
                     </ul>
                 </li>
                 <li >
@@ -65,8 +74,7 @@
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="login.html"><span class="glyphicon glyphicon-user"></span>&nbsp;${admin.adminId}，已登录</a></li>
-                <li><a href="logout.html"><span class="glyphicon glyphicon-log-in"></span>&nbsp;退出</a></li>
+                <li><a href="logout.html"><span class="glyphicon glyphicon-log-in"></span>退出账号</a></li>
             </ul>
         </div>
     </div>
@@ -78,7 +86,7 @@
             <h3 class="panel-title">添加读者</h3>
         </div>
         <div class="panel-body">
-            <form action="reader_add_do.html" method="post" id="readeredit" >
+            <form action="reader_add_do.html" method="post" id="readeredit" class="formBody">
                 <div class="input-group">
                     <span  class="input-group-addon">读者证号</span>
                     <input  type="text" class="form-control" name="readerId" id="readerId">

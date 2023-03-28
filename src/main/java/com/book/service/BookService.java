@@ -2,6 +2,7 @@ package com.book.service;
 
 import com.book.dao.BookDao;
 import com.book.domain.Book;
+import com.book.domain.BookClassCount;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +23,12 @@ public class BookService {
 
     public ArrayList<Book> getAllBooks(){
         return bookDao.getAllBooks();
+    }
+    public ArrayList<Book> getRandomBooks(){
+        return bookDao.getRandomBooks();
+    }
+    public ArrayList<BookClassCount> countBookAsClass(){
+        return bookDao.countBookAsClass();
     }
 
     public int deleteBook(long bookId){
